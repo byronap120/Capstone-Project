@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VR Viewer</string>
+    <string name="LogIn_Screen_Email">Email</string>
+    <string name="LogIn_Screen_Password">Password</string>v
+    <string name="LogIn_SignUp">Sign up</string>
+    <string name="title_activity_explore_post">ExplorePostActivity</string>
+</resources>
