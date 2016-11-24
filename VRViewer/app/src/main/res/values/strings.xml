@@ -7,4 +7,9 @@
     <string name="newPost_title_hint">Title</string>
     <string name="newPost_description_hint">Description</string>
     <string name="newPost_button">Post</string>
+    <string name="dialog_loading">Loading...</string>
+
+    <!--Error Messages-->
+    <string name="newPost_required_data">Required</string>
+    <string name="newPost_image_error">An error occurred loading image</string>
 </resources>

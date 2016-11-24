@@ -1,13 +1,14 @@
 package com.example.byron.vrviewer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -15,25 +16,43 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.byron.vrviewer.models.Post;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 
 public class NewPostActivity extends AppCompatActivity {
 
     static final int GALLERY = 1;
-    private VrPanoramaView panoWidgetView;
+    static final private String TAG = "NewPostActivity";
+
     public boolean loadImageSuccessful;
-    private String TAG = "NewPostActivity";
+
     private ImageLoaderTask backgroundImageLoaderTask;
-    private String packagePath;
+    private Uri selectedImageUri;
+
+    private VrPanoramaView panoWidgetView;
     private Button buttonPost;
     private EditText editTextTitle;
     private EditText editTextDescription;
+    private ProgressDialog progressDialog;
+
+    private FirebaseApp app;
+    private FirebaseDatabase database;
+    private FirebaseStorage storage;
+
+    private StorageReference storageRef;
+    private DatabaseReference databaseRef;
 
 
     @Override
@@ -47,29 +66,90 @@ public class NewPostActivity extends AppCompatActivity {
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newPost();
+                if (dataIsCorrect()) {
+                    newPost();
+                }
             }
         });
-
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
 
-        packagePath = Environment.getExternalStorageDirectory().getPath();
+        // Initialize Firebase
+        app = FirebaseApp.getInstance();
+        database = FirebaseDatabase.getInstance(app);
+        storage = FirebaseStorage.getInstance(app);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/jpeg");
+        intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), GALLERY);
     }
 
-    private void newPost() {
+    public boolean dataIsCorrect() {
+        boolean allDataIsCorrect = true;
 
+        if (TextUtils.isEmpty(editTextTitle.getText())) {
+            String errorMessage = getResources().getString(R.string.newPost_required_data);
+            editTextTitle.setError(errorMessage);
+            allDataIsCorrect = false;
+        }
+
+        if (!loadImageSuccessful) {
+            String errorMessage = getResources().getString(R.string.newPost_image_error);
+            Toast.makeText(NewPostActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            allDataIsCorrect = false;
+        }
+
+        return allDataIsCorrect;
+    }
+
+    private void newPost() {
+        progressDialog = new ProgressDialog(NewPostActivity.this);
+        String loadingMessage = getResources().getString(R.string.dialog_loading);
+        progressDialog.setMessage(loadingMessage);
+        progressDialog.show();
+
+        // Get a reference to the location where we'll store our photos
+        storageRef = storage.getReference("chat_photos");
+        // Get a reference to store file at chat_photos/<FILENAME>
+        final StorageReference photoRef = storageRef.child(selectedImageUri.getLastPathSegment());
+
+        // Upload Image to Firebase Storage
+        photoRef.putFile(selectedImageUri)
+                .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // When the image has successfully uploaded, we get its download URL
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        writeNewPost(
+                                editTextTitle.getText().toString(),
+                                editTextDescription.getText().toString(),
+                                downloadUrl.toString());
+                    }
+                });
+    }
+
+    private void writeNewPost(String title, String description, String imageLink) {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.getDisplayName();
+
+        Post post = new Post(title, description, user.getDisplayName(), imageLink);
+
+        databaseRef = database.getReference("posts");
+        databaseRef.push().setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                progressDialog.dismiss();
+                startActivity(new Intent(NewPostActivity.this, ExplorePostsActivity.class));
+                finish();
+            }
+        });
     }
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY && resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
+            selectedImageUri = data.getData();
             loadPanoramicImage(selectedImageUri);
         }
     }
@@ -91,7 +171,6 @@ public class NewPostActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Pair<Uri, Options>... fileInformation) {
             Options panoOptions = null;  // It's safe to use null VrPanoramaView.Options.
-            InputStream istr = null;
             Bitmap bitmap;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileInformation[0].first);
@@ -101,7 +180,6 @@ public class NewPostActivity extends AppCompatActivity {
                 Log.e(TAG, "Could not load file: " + e);
                 return false;
             }
-
 
             panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
             return true;
