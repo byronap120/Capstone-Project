@@ -18,4 +18,35 @@
         android:scrollbars="@null"
         android:layout_height="250dip"/>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/editTextTitle"
+        android:layout_alignStart="@+id/editTextTitle"
+        android:layout_marginTop="28dp"
+        android:id="@+id/editTextDescription"
+        android:hint="@string/newPost_description_hint" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp"
+        android:id="@+id/buttonPost"
+        android:text="@string/newPost_button" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_marginTop="22dp"
+        android:id="@+id/editTextTitle"
+        android:hint="@string/newPost_title_hint"
+        android:layout_below="@+id/pano_view"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

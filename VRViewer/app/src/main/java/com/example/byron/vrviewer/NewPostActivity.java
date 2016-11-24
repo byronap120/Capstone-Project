@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
@@ -28,11 +31,25 @@ public class NewPostActivity extends AppCompatActivity {
     private String TAG = "NewPostActivity";
     private ImageLoaderTask backgroundImageLoaderTask;
     private String packagePath;
+    private Button buttonPost;
+    private EditText editTextTitle;
+    private EditText editTextDescription;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
+
+        editTextTitle = (EditText) findViewById(R.id.editTextTitle);
+        editTextDescription = (EditText) findViewById(R.id.editTextDescription);
+        buttonPost = (Button) findViewById(R.id.buttonPost);
+        buttonPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newPost();
+            }
+        });
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
@@ -43,6 +60,10 @@ public class NewPostActivity extends AppCompatActivity {
         intent.setType("image/jpeg");
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), GALLERY);
+    }
+
+    private void newPost() {
+
     }
 
 
@@ -83,12 +104,6 @@ public class NewPostActivity extends AppCompatActivity {
 
 
             panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
-            try {
-                istr.close();
-            } catch (IOException e) {
-                Log.e(TAG, "Could not close input stream: " + e);
-            }
-
             return true;
         }
     }
