@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.byron.vrviewer.R;
 import com.example.byron.vrviewer.models.Post;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,12 @@ import java.util.List;
  * Created by Byron on 11/27/2016.
  */
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>  {
 
-    private List<Post> postList;
+    private static List<Post> postList;
     private Context context;
+
+    private static OnItemClickListener listener;
 
     public PostsAdapter(Context context) {
         this.postList = new ArrayList<>();
@@ -51,13 +53,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Post userPost = postList.get(position);
 
-        // Set item views based on your views and data model
         TextView userName = viewHolder.userName;
         userName.setText(userPost.getUsername());
 
         ImageView postImage = viewHolder.postImage;
         String imageLink = userPost.getImageLink();
-        //Picasso.with(context).load(imageLink).into(postImage);
 
         Glide.with(context)
                 .load(imageLink)
@@ -70,8 +70,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
         return postList.size();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, String postRef);
+    }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView postImage;
         TextView userName;
@@ -84,6 +92,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
             userName = (TextView) itemView.findViewById(R.id.textViewUser);
             buttonVR = (Button) itemView.findViewById(R.id.buttonVR);
             buttonDetails = (Button) itemView.findViewById(R.id.buttonDetails);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                Post post = postList.get(position);
+                listener.onItemClick(view, post.getPostRef());
+            }
         }
     }
 }

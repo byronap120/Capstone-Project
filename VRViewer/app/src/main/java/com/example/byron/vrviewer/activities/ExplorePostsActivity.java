@@ -40,13 +40,21 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         databaseRef = database.getReference("posts");
         databaseRef.keepSynced(true);
 
-        // Listen for when child nodes get added to the collection
         databaseRef.addChildEventListener(this);
 
         RecyclerView postsRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
         postsAdapter = new PostsAdapter(this);
         postsRecyclerView.setAdapter(postsAdapter);
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        postsAdapter.setOnItemClickListener(new PostsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, String postRef) {
+                Intent intent = new Intent(ExplorePostsActivity.this, DetailActivity.class);
+                intent.putExtra("postRef", postRef);
+                startActivity(intent);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +68,9 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        dataSnapshot.getRef();
         Post post = dataSnapshot.getValue(Post.class);
+        post.setPostRef(dataSnapshot.getRef().getKey());
         postsAdapter.addNewPost(post);
     }
 

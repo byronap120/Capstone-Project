@@ -7,12 +7,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".VRViewerApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.example.byron.vrviewer.VRViewerApp">
+        android:theme="@style/AppTheme">
         <activity android:name=".activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,8 @@
             android:name=".activities.ExplorePostsActivity"
             android:label="@string/title_activity_explore_post"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.NewPostActivity"></activity>
+        <activity android:name=".activities.NewPostActivity" />
+        <activity android:name=".activities.DetailActivity"></activity>
     </application>
 
 </manifest>

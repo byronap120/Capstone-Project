@@ -1,19 +1,23 @@
 package com.example.byron.vrviewer.models;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by Byron on 11/24/2016.
  */
 
 public class Post {
 
-    public String title;
-    public String description;
-    public String username;
-    public String imageLink;
-    public int likes = 0;
+    private String title;
+    private String description;
+    private String username;
+    private String imageLink;
+    private int likes = 0;
+    @Exclude
+    private String postRef;
 
-    public Post(){
-
+    public Post() {
     }
 
     public Post(String title, String description, String username, String imageLink) {
@@ -61,5 +65,13 @@ public class Post {
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public String getPostRef() {
+        return postRef;
+    }
+
+    public void setPostRef(String postRef) {
+        this.postRef = postRef;
     }
 }
