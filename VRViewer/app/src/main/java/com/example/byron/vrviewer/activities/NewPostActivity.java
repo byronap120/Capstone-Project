@@ -1,4 +1,4 @@
-package com.example.byron.vrviewer;
+package com.example.byron.vrviewer.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.byron.vrviewer.R;
 import com.example.byron.vrviewer.models.Post;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
@@ -107,6 +108,8 @@ public class NewPostActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(NewPostActivity.this);
         String loadingMessage = getResources().getString(R.string.dialog_loading);
         progressDialog.setMessage(loadingMessage);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
         // Get a reference to the location where we'll store our photos
@@ -140,8 +143,8 @@ public class NewPostActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 progressDialog.dismiss();
-                startActivity(new Intent(NewPostActivity.this, ExplorePostsActivity.class));
-                finish();
+                //startActivity(new Intent(NewPostActivity.this, ExplorePostsActivity.class));
+                onBackPressed();
             }
         });
     }

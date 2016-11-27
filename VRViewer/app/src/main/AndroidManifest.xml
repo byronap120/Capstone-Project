@@ -11,8 +11,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".SignInActivity">
+        android:theme="@style/AppTheme"
+        android:name="com.example.byron.vrviewer.VRViewerApp">
+        <activity android:name=".activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ExplorePostsActivity"
+            android:name=".activities.ExplorePostsActivity"
             android:label="@string/title_activity_explore_post"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NewPostActivity"></activity>
+        <activity android:name=".activities.NewPostActivity"></activity>
     </application>
 
 </manifest>
