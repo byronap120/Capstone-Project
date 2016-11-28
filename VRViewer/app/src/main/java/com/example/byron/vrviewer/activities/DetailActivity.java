@@ -1,16 +1,10 @@
 package com.example.byron.vrviewer.activities;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.byron.vrviewer.R;
 import com.example.byron.vrviewer.models.Post;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +26,7 @@ public class DetailActivity extends BaseImageVRActivity implements ValueEventLis
         super.onCreate(savedInstanceState);
 
         //Loading DetailActivity layout into the BaseImageVRActivity layout
-        RelativeLayout baseRelativeLayout = (RelativeLayout)findViewById(R.id.base_relative_layout);
+        RelativeLayout baseRelativeLayout = (RelativeLayout) findViewById(R.id.base_relative_layout);
         View detailActivityLayout = getLayoutInflater().inflate(R.layout.activity_detail, null);
         baseRelativeLayout.addView(detailActivityLayout);
 
