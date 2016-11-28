@@ -43,7 +43,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         databaseRef.addChildEventListener(this);
 
         RecyclerView postsRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
-        postsAdapter = new PostsAdapter(this);
+        postsAdapter = new PostsAdapter(getApplicationContext());
         postsRecyclerView.setAdapter(postsAdapter);
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 

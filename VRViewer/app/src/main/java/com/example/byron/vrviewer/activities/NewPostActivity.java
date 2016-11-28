@@ -2,18 +2,13 @@ package com.example.byron.vrviewer.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.byron.vrviewer.R;
@@ -27,22 +22,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
-import com.google.vr.sdk.widgets.pano.VrPanoramaView;
-import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
 
-
-public class NewPostActivity extends AppCompatActivity {
+public class NewPostActivity extends BaseImageVRActivity {
 
     static final int GALLERY = 1;
-    static final private String TAG = "NewPostActivity";
 
-    public boolean loadImageSuccessful;
-
-    private ImageLoaderTask backgroundImageLoaderTask;
     private Uri selectedImageUri;
 
-    private VrPanoramaView panoWidgetView;
     private Button buttonPost;
     private EditText editTextTitle;
     private EditText editTextDescription;
@@ -59,11 +45,15 @@ public class NewPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_post);
 
-        editTextTitle = (EditText) findViewById(R.id.editTextTitle);
-        editTextDescription = (EditText) findViewById(R.id.editTextDescription);
-        buttonPost = (Button) findViewById(R.id.buttonPost);
+        //Loading NewPostActivity layout into the BaseImageVRActivity layout
+        RelativeLayout baseRelativeLayout = (RelativeLayout) findViewById(R.id.base_relative_layout);
+        View postActivityLayout = getLayoutInflater().inflate(R.layout.activity_new_post, null);
+        baseRelativeLayout.addView(postActivityLayout);
+
+        editTextTitle = (EditText) postActivityLayout.findViewById(R.id.editTextTitle);
+        editTextDescription = (EditText) postActivityLayout.findViewById(R.id.editTextDescription);
+        buttonPost = (Button) postActivityLayout.findViewById(R.id.buttonPost);
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,8 +62,6 @@ public class NewPostActivity extends AppCompatActivity {
                 }
             }
         });
-        panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
-        panoWidgetView.setEventListener(new ActivityEventListener());
 
         // Initialize Firebase
         app = FirebaseApp.getInstance();
@@ -105,13 +93,7 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     private void newPost() {
-        progressDialog = new ProgressDialog(NewPostActivity.this);
-        String loadingMessage = getResources().getString(R.string.dialog_loading);
-        progressDialog.setMessage(loadingMessage);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
+        createAndShowDialog();
         // Get a reference to the location where we'll store our photos
         storageRef = storage.getReference("chat_photos");
         // Get a reference to store file at chat_photos/<FILENAME>
@@ -129,6 +111,15 @@ public class NewPostActivity extends AppCompatActivity {
                                 downloadUrl.toString());
                     }
                 });
+    }
+
+    private void createAndShowDialog() {
+        progressDialog = new ProgressDialog(NewPostActivity.this);
+        String loadingMessage = getResources().getString(R.string.dialog_loading);
+        progressDialog.setMessage(loadingMessage);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
     }
 
     private void writeNewPost(String title, String description, String imageLink) {
@@ -149,94 +140,11 @@ public class NewPostActivity extends AppCompatActivity {
         });
     }
 
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY && resultCode == RESULT_OK) {
             selectedImageUri = data.getData();
-            loadPanoramicImage(selectedImageUri);
+            loadPanoramicImageFromDisk(selectedImageUri);
         }
     }
 
-    private void loadPanoramicImage(Uri fileUri) {
-        Options panoOptions = new Options();
-        panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
-
-        backgroundImageLoaderTask = new ImageLoaderTask();
-        backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
-    }
-
-
-    class ImageLoaderTask extends AsyncTask<Pair<Uri, Options>, Void, Boolean> {
-
-        /**
-         * Reads the bitmap from disk in the background and waits until it's loaded by pano widget.
-         */
-        @Override
-        protected Boolean doInBackground(Pair<Uri, Options>... fileInformation) {
-            Options panoOptions = null;  // It's safe to use null VrPanoramaView.Options.
-            Bitmap bitmap;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileInformation[0].first);
-                panoOptions = fileInformation[0].second;
-
-            } catch (Exception e) {
-                Log.e(TAG, "Could not load file: " + e);
-                return false;
-            }
-
-            panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
-            return true;
-        }
-    }
-
-
-    @Override
-    protected void onPause() {
-        panoWidgetView.pauseRendering();
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        panoWidgetView.resumeRendering();
-    }
-
-    @Override
-    protected void onDestroy() {
-        // Destroy the widget and free memory.
-        panoWidgetView.shutdown();
-
-        // The background task has a 5 second timeout so it can potentially stay alive for 5 seconds
-        // after the activity is destroyed unless it is explicitly cancelled.
-        if (backgroundImageLoaderTask != null) {
-            backgroundImageLoaderTask.cancel(true);
-        }
-        super.onDestroy();
-    }
-
-    /**
-     * Listen to the important events from widget.
-     */
-    private class ActivityEventListener extends VrPanoramaEventListener {
-        /**
-         * Called by pano widget on the UI thread when it's done loading the image.
-         */
-        @Override
-        public void onLoadSuccess() {
-            loadImageSuccessful = true;
-        }
-
-        /**
-         * Called by pano widget on the UI thread on any asynchronous error.
-         */
-        @Override
-        public void onLoadError(String errorMessage) {
-            loadImageSuccessful = false;
-            Toast.makeText(
-                    NewPostActivity.this, "Error loading pano: " + errorMessage, Toast.LENGTH_LONG)
-                    .show();
-            Log.e(TAG, "Error loading pano: " + errorMessage);
-        }
-    }
 }

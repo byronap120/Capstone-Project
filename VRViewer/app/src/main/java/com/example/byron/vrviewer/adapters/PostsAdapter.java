@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.byron.vrviewer.R;
 import com.example.byron.vrviewer.models.Post;
 
@@ -60,6 +61,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         Glide.with(context)
                 .load(imageLink)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(postImage);
 
     }

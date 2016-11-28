@@ -11,13 +11,6 @@
     tools:context="com.example.byron.vrviewer.activities.NewPostActivity">
 
 
-    <com.google.vr.sdk.widgets.pano.VrPanoramaView
-        android:id="@+id/pano_view"
-        android:layout_margin="5dip"
-        android:layout_width="match_parent"
-        android:scrollbars="@null"
-        android:layout_height="250dip"/>
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,15 +22,6 @@
         android:id="@+id/editTextDescription"
         android:hint="@string/newPost_description_hint" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:id="@+id/buttonPost"
-        android:text="@string/newPost_button" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,5 +32,15 @@
         android:hint="@string/newPost_title_hint"
         android:layout_below="@+id/pano_view"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonPost"
+        android:text="@string/newPost_button"
+        android:layout_below="@+id/editTextDescription"
+        android:layout_alignStart="@+id/editTextDescription"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="19dp" />
 
 </RelativeLayout>

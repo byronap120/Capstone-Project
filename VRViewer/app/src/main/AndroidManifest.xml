@@ -25,7 +25,8 @@
             android:label="@string/title_activity_explore_post"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.NewPostActivity" />
-        <activity android:name=".activities.DetailActivity"></activity>
+        <activity android:name=".activities.DetailActivity" />
+        <activity android:name=".activities.BaseImageVRActivity"></activity>
     </application>
 
 </manifest>
