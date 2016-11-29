@@ -1,5 +1,6 @@
 package com.example.byron.vrviewer.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.example.byron.vrviewer.DatabaseContract;
 import com.example.byron.vrviewer.R;
 import com.example.byron.vrviewer.adapters.PostsAdapter;
 import com.example.byron.vrviewer.models.Post;
@@ -72,6 +74,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         Post post = dataSnapshot.getValue(Post.class);
         post.setPostRef(dataSnapshot.getRef().getKey());
         postsAdapter.addNewPost(post);
+        addToDataBase(post);
     }
 
     @Override
@@ -92,5 +95,15 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+    private void addToDataBase(Post post) {
+
+        ContentValues post_values = new ContentValues();
+        post_values.put(DatabaseContract.posts_table.TITLE, post.getTitle());
+        post_values.put(DatabaseContract.posts_table.USERNAME, post.getUsername());
+        post_values.put(DatabaseContract.posts_table.IMAGE_LINK, post.getImageLink());
+
+        getApplicationContext().getContentResolver().insert(DatabaseContract.BASE_CONTENT_URI, post_values);
     }
 }

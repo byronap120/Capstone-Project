@@ -43,6 +43,12 @@
             android:name=".widget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <provider
+            android:name=".PostProvider"
+            android:authorities="com.example.byron.vrviewer"
+            android:exported="true"
+            android:grantUriPermissions="true"/>
+
     </application>
 
 </manifest>
