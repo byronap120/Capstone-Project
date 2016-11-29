@@ -25,6 +25,7 @@ public class PostDBHelper extends SQLiteOpenHelper
                 + posts_table._ID + " INTEGER PRIMARY KEY,"
                 + posts_table.TITLE + " TEXT NOT NULL,"
                 + posts_table.USERNAME + " INTEGER NOT NULL,"
+                + posts_table.POST_REF + " TEXT NOT NULL,"
                 + posts_table.IMAGE_LINK + " TEXT NOT NULL"
                 + " );";
         db.execSQL(CreateScoresTable);

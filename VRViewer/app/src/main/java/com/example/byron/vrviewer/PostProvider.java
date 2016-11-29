@@ -38,10 +38,32 @@ public class PostProvider extends ContentProvider {
         return false;
     }
 
-    @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+        final SQLiteDatabase db = postDBHelper.getWritableDatabase();
+        Cursor retCursor;
+        switch(uriMatcher.match(uri)){
+            case POSTS:
+                retCursor = db.query(
+                        DatabaseContract.POSTS_TABLE,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Set the notification URI for the cursor to the one passed into the function. This
+        // causes the cursor to register a content observer to watch for changes that happen to
+        // this URI and any of it's descendants. By descendants, we mean any URI that begins
+        // with this path.
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
     }
 
     @Nullable
@@ -61,8 +83,6 @@ public class PostProvider extends ContentProvider {
         final SQLiteDatabase db = postDBHelper.getWritableDatabase();
         long _id;
         Uri returnUri;
-
-        int uriMatcher3 = uriMatcher.match(uri);
 
         switch (uriMatcher.match(uri)) {
             case POSTS:
@@ -84,12 +104,34 @@ public class PostProvider extends ContentProvider {
     }
 
     @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = postDBHelper.getWritableDatabase();
+        int rows;
+
+        switch(uriMatcher.match(uri)){
+            case POSTS:
+                rows = db.update(DatabaseContract.POSTS_TABLE, values, selection, selectionArgs);
+
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if(rows != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rows;
+    }
+
+
+    @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
 
-    @Override
+/*    @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
-    }
+    }*/
 }

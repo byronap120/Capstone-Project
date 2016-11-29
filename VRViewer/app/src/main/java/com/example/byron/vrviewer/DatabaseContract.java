@@ -24,6 +24,7 @@ public class DatabaseContract {
         public static final String TITLE = "title";
         public static final String USERNAME = "username";
         public static final String IMAGE_LINK = "imageLink";
+        public static final String POST_REF = "post_ref";
 
         //Types
         public static final String CONTENT_TYPE =
