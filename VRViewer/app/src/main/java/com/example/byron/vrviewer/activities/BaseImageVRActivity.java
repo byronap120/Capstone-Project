@@ -31,6 +31,9 @@ public class BaseImageVRActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_image_vr);
 
+        getSupportActionBar().hide();
+
+
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new BaseImageVRActivity.ActivityEventListener());
     }

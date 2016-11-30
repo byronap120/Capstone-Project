@@ -18,9 +18,10 @@
 
             <ImageView
                 android:id="@+id/imageViewPost"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                card_view:srcCompat="@drawable/com_facebook_auth_dialog_background" />
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                card_view:srcCompat="@drawable/com_facebook_auth_dialog_background"
+                android:scaleType="centerCrop" />
 
             <Button
                 android:id="@+id/buttonVR"
