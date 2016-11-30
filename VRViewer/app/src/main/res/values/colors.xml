@@ -3,4 +3,10 @@
     <color name="colorPrimary">#2C3E50</color>
     <color name="colorPrimaryDark">#1f2e3d</color>
     <color name="colorAccent">#E74C3C</color>
+    <color name="postUserName">#2980b9</color>
+    <color name="backgroundPost">#d5d9e1</color>
+    <color name="white">#ffffff</color>
+
+
+
 </resources>

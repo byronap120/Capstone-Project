@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by Byron on 11/27/2016.
  */
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>  {
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     private static List<Post> postList;
     private Context context;
@@ -56,6 +57,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView userName = viewHolder.userName;
         userName.setText(userPost.getUsername());
 
+        // TextView textViewTitle = viewHolder.textViewTitle;
+        // textViewTitle.setText(userPost.getTitle());
+
         ImageView postImage = viewHolder.postImage;
         String imageLink = userPost.getImageLink();
 
@@ -72,7 +76,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View itemView, String postRef);
+        void onItemClick(View itemView, String postRef, boolean fullView);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -80,28 +84,37 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView postImage;
         TextView userName;
-        Button buttonVR;
-        Button buttonDetails;
+        ImageButton buttonFullView;
+        ImageButton buttonDetails;
 
         public ViewHolder(View itemView) {
             super(itemView);
             postImage = (ImageView) itemView.findViewById(R.id.imageViewPost);
             userName = (TextView) itemView.findViewById(R.id.textViewUser);
-            buttonVR = (Button) itemView.findViewById(R.id.buttonVR);
-            buttonDetails = (Button) itemView.findViewById(R.id.buttonDetails);
+            buttonFullView = (ImageButton) itemView.findViewById(R.id.buttonFullView);
+            buttonDetails = (ImageButton) itemView.findViewById(R.id.buttonDetails);
+
+            buttonFullView.setOnClickListener(this);
+            buttonDetails.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition(); // gets item position
-            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+
+            boolean fullView = false;
+            if (view.getId() == buttonFullView.getId()) {
+                fullView = true;
+            }
+
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
                 Post post = postList.get(position);
-                listener.onItemClick(view, post.getPostRef());
+                listener.onItemClick(view, post.getPostRef(), fullView);
             }
         }
     }

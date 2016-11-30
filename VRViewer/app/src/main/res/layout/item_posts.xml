@@ -1,51 +1,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardCornerRadius="4dp">
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp">
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+
+
+
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/textViewTitle"
+                android:src="@drawable/ic_action_account_circle_40" />
+
 
             <ImageView
                 android:id="@+id/imageViewPost"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 card_view:srcCompat="@drawable/com_facebook_auth_dialog_background"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:layout_below="@id/user_avatar"/>
 
-            <Button
-                android:id="@+id/buttonVR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageViewPost"
-                android:text="Button" />
-
-
-            <Button
-                android:id="@+id/buttonDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageViewPost"
-                android:layout_toRightOf="@+id/buttonVR"
-                android:text="Button" />
 
             <TextView
-                android:text="TextView"
+                tool:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/buttonVR"
+                android:id="@+id/textViewUser"
+                android:layout_marginBottom="11dp"
+                android:textColor="@color/postUserName"
+                android:textSize="14sp"
+                android:layout_alignBottom="@+id/user_avatar"
+                android:layout_toEndOf="@+id/user_avatar"
+                android:textStyle="normal|bold" />
+
+            <View
+                android:layout_height="20dp"
+                android:background="@color/postUserName"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/imageViewPost"
+                android:layout_centerHorizontal="true"
+                android:layout_width="1dp" />
+
+            <ImageButton
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                card_view:srcCompat="@drawable/ic_info_outline_black_24dp"
+                android:layout_marginEnd="20dp"
+                android:id="@+id/buttonDetails"
+                android:layout_below="@+id/imageViewPost"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@android:drawable/screen_background_light_transparent" />
+
+            <ImageButton
+                android:layout_height="wrap_content"
+                card_view:srcCompat="@drawable/ic_panorama_black_24dp"
+                android:id="@+id/buttonFullView"
+                android:layout_below="@+id/imageViewPost"
+                android:backgroundTint="@android:drawable/screen_background_light_transparent"
                 android:layout_alignParentStart="true"
-                android:id="@+id/textViewUser" />
+                android:layout_toStartOf="@+id/view"
+                android:layout_width="150dp"
+                android:layout_marginLeft="20dp" />
+
+
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

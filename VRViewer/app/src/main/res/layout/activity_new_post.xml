@@ -20,7 +20,9 @@
         android:layout_alignStart="@+id/editTextTitle"
         android:layout_marginTop="28dp"
         android:id="@+id/editTextDescription"
-        android:hint="@string/newPost_description_hint" />
+        android:hint="@string/newPost_description_hint"
+        android:textAlignment="viewStart"
+        android:layout_centerHorizontal="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -34,13 +36,15 @@
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/buttonPost"
         android:text="@string/newPost_button"
+        android:layout_marginTop="26dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:layout_below="@+id/editTextDescription"
-        android:layout_alignStart="@+id/editTextDescription"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="19dp" />
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center" />
 
 </RelativeLayout>

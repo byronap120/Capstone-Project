@@ -51,9 +51,10 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
 
         postsAdapter.setOnItemClickListener(new PostsAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View itemView, String postRef) {
+            public void onItemClick(View itemView, String postRef, boolean fullView) {
                 Intent intent = new Intent(ExplorePostsActivity.this, DetailActivity.class);
                 intent.putExtra("postRef", postRef);
+                intent.putExtra("fullView", fullView);
                 startActivity(intent);
             }
         });

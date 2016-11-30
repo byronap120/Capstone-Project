@@ -22,7 +22,7 @@ import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
 public class BaseImageVRActivity extends AppCompatActivity {
 
     public boolean loadImageSuccessful;
-    private VrPanoramaView panoWidgetView;
+    protected VrPanoramaView panoWidgetView;
     private BaseImageVRActivity.ImageLoaderTask backgroundImageLoaderTask;
     static final private String TAG = "BaseImageVRActivity";
 
@@ -36,6 +36,10 @@ public class BaseImageVRActivity extends AppCompatActivity {
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new BaseImageVRActivity.ActivityEventListener());
+
+
+
+
     }
 
     protected void loadPanoramicImageFromDisk(Uri fileUri) {

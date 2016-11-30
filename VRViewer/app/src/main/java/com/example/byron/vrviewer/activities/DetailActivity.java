@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
 public class DetailActivity extends BaseImageVRActivity implements ValueEventListener {
 
@@ -20,6 +21,7 @@ public class DetailActivity extends BaseImageVRActivity implements ValueEventLis
 
     private TextView textViewUser;
     private TextView textViewTitle;
+    private TextView textViewDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +34,16 @@ public class DetailActivity extends BaseImageVRActivity implements ValueEventLis
 
         textViewUser = (TextView) baseRelativeLayout.findViewById(R.id.textViewUser);
         textViewTitle = (TextView) baseRelativeLayout.findViewById(R.id.textViewTitle);
+        textViewDescription = (TextView) baseRelativeLayout.findViewById(R.id.textViewDescription);
 
         postRef = getIntent().getStringExtra("postRef");
         mPostReference = FirebaseDatabase.getInstance().getReference().child("posts").child(postRef);
         mPostReference.addValueEventListener(this);
+
+        boolean fullView = getIntent().getBooleanExtra("fullView", false);
+        if(fullView) {
+            panoWidgetView.setDisplayMode(VrPanoramaView.DisplayMode.FULLSCREEN_MONO);
+        }
     }
 
     @Override
@@ -43,6 +51,7 @@ public class DetailActivity extends BaseImageVRActivity implements ValueEventLis
         Post post = dataSnapshot.getValue(Post.class);
         textViewUser.setText(post.getUsername());
         textViewTitle.setText(post.getTitle());
+        textViewDescription.setText(post.getDescription());
         loadPanoramicImageFromUrl(post.getImageLink());
     }
 

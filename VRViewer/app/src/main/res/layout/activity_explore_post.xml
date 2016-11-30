@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/backgroundPost"
     tools:context="com.example.byron.vrviewer.activities.ExplorePostsActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -17,10 +18,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-             />
-
-
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
 
 
     </android.support.design.widget.AppBarLayout>
@@ -35,12 +33,11 @@
         app:srcCompat="@drawable/ic_photo_library_white_24dp" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/postsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/postsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 </android.support.design.widget.CoordinatorLayout>
