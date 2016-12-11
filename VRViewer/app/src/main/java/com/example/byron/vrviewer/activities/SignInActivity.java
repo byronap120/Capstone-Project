@@ -43,14 +43,6 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
         mAuth = FirebaseAuth.getInstance();
 
-
-        FirebaseUser userTemp = FirebaseAuth.getInstance().getCurrentUser();
-        if (userTemp != null) {
-            startActivity(new Intent(SignInActivity.this, ExplorePostsActivity.class));
-            finish();
-        }
-
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -58,17 +50,16 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    gotToExploreActivity();
                 }
             }
         };
-
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 signIn();
             }
         });
-
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -80,7 +71,6 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
 
     }
 
@@ -121,10 +111,17 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            gotToExploreActivity();
                         }
                         // ...
                     }
                 });
+    }
+
+    private void gotToExploreActivity() {
+        startActivity(new Intent(SignInActivity.this, ExplorePostsActivity.class));
+        finish();
     }
 
 
