@@ -106,14 +106,14 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         post_values.put(DatabaseContract.posts_table.IMAGE_LINK, post.getImageLink());
         post_values.put(DatabaseContract.posts_table.POST_REF,  post.getPostRef());
 
-        getApplicationContext().getContentResolver().insert(DatabaseContract.BASE_CONTENT_URI, post_values);
+    //    getApplicationContext().getContentResolver().insert(DatabaseContract.BASE_CONTENT_URI, post_values);
 
-/*        String[] postRef = {post.getPostRef()};
+        String[] postRef = {post.getPostRef()};
 
         getApplicationContext().getContentResolver().update(
                 DatabaseContract.BASE_CONTENT_URI,
                 post_values,
                 DatabaseContract.posts_table.POST_REF + " = ?",
-                postRef);*/
+                postRef);
     }
 }

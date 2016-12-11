@@ -57,11 +57,6 @@ public class PostProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-
-        // Set the notification URI for the cursor to the one passed into the function. This
-        // causes the cursor to register a content observer to watch for changes that happen to
-        // this URI and any of it's descendants. By descendants, we mean any URI that begins
-        // with this path.
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
@@ -119,19 +114,17 @@ public class PostProvider extends ContentProvider {
 
         if(rows != 0){
             getContext().getContentResolver().notifyChange(uri, null);
+        } else {
+            insert(uri, values);
         }
+
 
         return rows;
     }
-
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
 
-/*    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
-    }*/
 }

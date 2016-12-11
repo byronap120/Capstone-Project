@@ -36,17 +36,7 @@ public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory
 
 
     private void populateListItem() {
-
         cursor = contentResolver.query (DatabaseContract.BASE_CONTENT_URI , null, null, null, null);
-/*
-
-        for (int i = 0; i < 10; i++) {
-            listItemList.add(i);
-        }
-
-
-*/
-
     }
 
     @Override
