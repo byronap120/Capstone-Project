@@ -9,6 +9,10 @@
     <string name="newPost_button">Post</string>
     <string name="dialog_loading">Loading...</string>
 
+    <!--Widget-->
+    <string name="widget_title">VR Viewer</string>
+    <string name="widget_subtitle">Latest Posts</string>
+
     <!--Error Messages-->
     <string name="newPost_required_data">Required</string>
     <string name="newPost_image_error">An error occurred loading image</string>

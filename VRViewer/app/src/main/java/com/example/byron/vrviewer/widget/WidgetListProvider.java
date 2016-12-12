@@ -4,13 +4,17 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.bumptech.glide.Glide;
 import com.example.byron.vrviewer.DatabaseContract;
 import com.example.byron.vrviewer.R;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Byron on 11/28/2016.
@@ -58,10 +62,28 @@ public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory
     public RemoteViews getViewAt(int position) {
         cursor.moveToPosition(position);
 
-        int usernameIndex = cursor.getColumnIndex(DatabaseContract.posts_table.USERNAME);
+        int titleIndex = cursor.getColumnIndex(DatabaseContract.posts_table.TITLE);
+        int imageIndex = cursor.getColumnIndex(DatabaseContract.posts_table.IMAGE_LINK);
 
         RemoteViews mView = new RemoteViews(context.getPackageName(), R.layout.widget_list_row);
-        mView.setTextViewText(R.id.textViewUser, cursor.getString(usernameIndex) + "");
+
+        try {
+            Bitmap bitmap = Glide.
+                    with(context).
+                    load(cursor.getString(imageIndex)).
+                    asBitmap().
+                    into(300, 250).
+                    get();
+
+            mView.setImageViewBitmap(R.id.imageViewPostWidget, bitmap);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+        mView.setTextViewText(R.id.textViewUser, cursor.getString(titleIndex) + "");
         return mView;
     }
 

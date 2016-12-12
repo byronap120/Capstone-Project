@@ -2,23 +2,47 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp" >
+    android:layout_margin="8dp"
+    android:background="@color/backgroundPost">
 
 
     <RelativeLayout
         android:id="@+id/header_widget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:text="@string/widget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="9dp"
+            android:id="@+id/textView"
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:text="@string/widget_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_below="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:textColor="@color/buttonTextColor" />
 
         <ImageView
             android:id="@+id/widgetImgLauncher"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/ic_launcher" />
-
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginEnd="16dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/textView3" />
 
 
     </RelativeLayout>
@@ -28,4 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/header_widget"/>
+
+
 </RelativeLayout>
