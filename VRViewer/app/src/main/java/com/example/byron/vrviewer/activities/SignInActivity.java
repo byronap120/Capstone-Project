@@ -125,12 +125,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void gotToExploreActivity() {
-
-        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(SignInActivity.this).toBundle();
-
-        startActivity(new Intent(SignInActivity.this, ExplorePostsActivity.class), bundle);
+        startActivity(new Intent(SignInActivity.this, ExplorePostsActivity.class));
         finish();
     }
 
