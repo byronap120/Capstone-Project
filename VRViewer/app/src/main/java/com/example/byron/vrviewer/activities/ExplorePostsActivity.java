@@ -1,8 +1,11 @@
 package com.example.byron.vrviewer.activities;
 
+import android.app.ActivityOptions;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -68,13 +71,18 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         postsAdapter.setOnItemClickListener(new PostsAdapter.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onItemClick(View itemView, String postRef, boolean fullView) {
                 Intent intent = new Intent(ExplorePostsActivity.this, DetailActivity.class);
                 intent.putExtra("postRef", postRef);
                 intent.putExtra("fullView", fullView);
                 trackAnalyticsEvent(postRef, fullView);
-                startActivity(intent);
+
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ExplorePostsActivity.this).toBundle();
+
+
+                startActivity(intent , bundle);
             }
         });
 

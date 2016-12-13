@@ -1,9 +1,12 @@
 package com.example.byron.vrviewer.activities;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -122,8 +125,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void gotToExploreActivity() {
-        startActivity(new Intent(SignInActivity.this, ExplorePostsActivity.class));
+
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(SignInActivity.this).toBundle();
+
+        startActivity(new Intent(SignInActivity.this, ExplorePostsActivity.class), bundle);
         finish();
     }
 

@@ -52,6 +52,7 @@
                 android:textStyle="normal|bold" />
 
             <View
+                android:id="@+id/view"
                 android:layout_height="20dp"
                 android:background="@color/postUserName"
                 android:layout_marginTop="10dp"
