@@ -115,7 +115,7 @@ public class NewPostActivity extends BaseImageVRActivity {
 
     private void createAndShowDialog() {
         progressDialog = new ProgressDialog(NewPostActivity.this);
-        String loadingMessage = getResources().getString(R.string.dialog_loading);
+        String loadingMessage = getResources().getString(R.string.dialog_Posting);
         progressDialog.setMessage(loadingMessage);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);

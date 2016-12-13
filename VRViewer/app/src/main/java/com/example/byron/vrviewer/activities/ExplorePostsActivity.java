@@ -17,6 +17,7 @@ import com.example.byron.vrviewer.models.Post;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +29,8 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
     private FirebaseApp app;
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     private PostsAdapter postsAdapter;
 
@@ -46,6 +49,8 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
 
         databaseRef.addChildEventListener(this);
 
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         AdView mAdView = (AdView)findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
@@ -68,6 +73,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
                 Intent intent = new Intent(ExplorePostsActivity.this, DetailActivity.class);
                 intent.putExtra("postRef", postRef);
                 intent.putExtra("fullView", fullView);
+                trackAnalyticsEvent(postRef, fullView);
                 startActivity(intent);
             }
         });
@@ -81,6 +87,12 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         });
     }
 
+    private void trackAnalyticsEvent(String postRef, boolean fullView) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, postRef);
+        bundle.putBoolean(FirebaseAnalytics.Param.VALUE, fullView);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {

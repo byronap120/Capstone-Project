@@ -1,5 +1,6 @@
 package com.example.byron.vrviewer.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private SignInButton signUpButton;
     private String TAG = "SignInActivity";
     private GoogleApiClient mGoogleApiClient;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
+                        progressDialog.dismiss();
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
@@ -126,6 +129,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
 
     private void signIn() {
+        createAndShowDialog();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -147,6 +151,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        progressDialog.dismiss();
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
@@ -158,5 +163,15 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 signIn();
                 break;
         }
+    }
+
+
+    private void createAndShowDialog() {
+        progressDialog = new ProgressDialog(SignInActivity.this);
+        String loadingMessage = getResources().getString(R.string.dialog_SignIn);
+        progressDialog.setMessage(loadingMessage);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
     }
 }
