@@ -16,4 +16,6 @@
     <!--Error Messages-->
     <string name="newPost_required_data">Required</string>
     <string name="newPost_image_error">An error occurred loading image</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
