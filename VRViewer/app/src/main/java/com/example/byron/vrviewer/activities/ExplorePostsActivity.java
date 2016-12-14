@@ -138,7 +138,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         post_values.put(DatabaseContract.posts_table.USERNAME, post.getUsername());
         post_values.put(DatabaseContract.posts_table.IMAGE_LINK, post.getImageLink());
         post_values.put(DatabaseContract.posts_table.POST_REF, post.getPostRef());
-        
+
         String[] postRef = {post.getPostRef()};
 
         getApplicationContext().getContentResolver().update(
