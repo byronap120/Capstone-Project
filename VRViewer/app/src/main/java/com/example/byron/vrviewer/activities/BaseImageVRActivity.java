@@ -1,13 +1,12 @@
 package com.example.byron.vrviewer.activities;
 
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Pair;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -15,16 +14,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.byron.vrviewer.R;
+import com.example.byron.vrviewer.BitmapLoader;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
-import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
 
-public class BaseImageVRActivity extends AppCompatActivity {
+public class BaseImageVRActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Bitmap> {
 
+    private static final String TAG = "BaseImageVRActivity";
+    private Uri fileUri;
     public boolean loadImageSuccessful;
     protected VrPanoramaView panoWidgetView;
-    private BaseImageVRActivity.ImageLoaderTask backgroundImageLoaderTask;
-    static final private String TAG = "BaseImageVRActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +32,8 @@ public class BaseImageVRActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new BaseImageVRActivity.ActivityEventListener());
-
-
-
 
     }
 
@@ -46,8 +41,8 @@ public class BaseImageVRActivity extends AppCompatActivity {
         VrPanoramaView.Options panoOptions = new VrPanoramaView.Options();
         panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
 
-        backgroundImageLoaderTask = new BaseImageVRActivity.ImageLoaderTask();
-        backgroundImageLoaderTask.execute((Pair.create(fileUri, panoOptions)));
+        this.fileUri = fileUri;
+        getLoaderManager().initLoader(0, null, this);
     }
 
     protected void loadPanoramicImageFromUrl(String imageUrl) {
@@ -82,35 +77,25 @@ public class BaseImageVRActivity extends AppCompatActivity {
     protected void onDestroy() {
         // Destroy the widget and free memory.
         panoWidgetView.shutdown();
-
-        if (backgroundImageLoaderTask != null) {
-            backgroundImageLoaderTask.cancel(true);
-        }
         super.onDestroy();
     }
 
-    //Read image from disk
-    class ImageLoaderTask extends AsyncTask<Pair<Uri, Options>, Void, Boolean> {
+    @Override
+    public Loader<Bitmap> onCreateLoader(int id, Bundle args) {
+        return new BitmapLoader(getApplicationContext(), fileUri);
+    }
 
-        /**
-         * Reads the bitmap from disk in the background and waits until it's loaded by pano widget.
-         */
-        @Override
-        protected Boolean doInBackground(Pair<Uri, Options>... fileInformation) {
-            Options panoOptions = null;  // It's safe to use null VrPanoramaView.Options.
-            Bitmap bitmap;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileInformation[0].first);
-                panoOptions = fileInformation[0].second;
+    @Override
+    public void onLoadFinished(Loader<Bitmap> loader, Bitmap bitmap) {
 
-            } catch (Exception e) {
-                Log.e(TAG, "Could not load file: " + e);
-                return false;
-            }
+        VrPanoramaView.Options panoOptions = new VrPanoramaView.Options();
+        panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
+        panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
+    }
 
-            panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
-            return true;
-        }
+    @Override
+    public void onLoaderReset(Loader<Bitmap> loader) {
+
     }
 
     /**
