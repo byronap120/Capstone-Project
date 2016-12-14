@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.example.byron.vrviewer.DatabaseContract;
 import com.example.byron.vrviewer.R;
+import com.example.byron.vrviewer.SaveDataAsyncTask;
 import com.example.byron.vrviewer.adapters.PostsAdapter;
 import com.example.byron.vrviewer.models.Post;
 import com.google.android.gms.ads.AdRequest;
@@ -26,6 +27,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ExplorePostsActivity extends AppCompatActivity implements ChildEventListener {
 
@@ -33,6 +37,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private ArrayList<Post> postList;
 
 
     private PostsAdapter postsAdapter;
@@ -65,6 +70,8 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         mAdView.loadAd(adRequest);
 
 
+        postList = new ArrayList<Post>();
+
         RecyclerView postsRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
         postsAdapter = new PostsAdapter(getApplicationContext());
         postsRecyclerView.setAdapter(postsAdapter);
@@ -93,6 +100,28 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
                 startActivity(new Intent(ExplorePostsActivity.this, NewPostActivity.class));
             }
         });
+
+
+        // This listener will get the complete list and then saved to DB
+        // This data will be used by App Widget
+        databaseRef.addListenerForSingleValueEvent(
+            new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot dataSnapshotResponse: dataSnapshot.getChildren()) {
+                        Post post = dataSnapshotResponse.getValue(Post.class);
+                        post.setPostRef(dataSnapshotResponse.getRef().getKey());
+                        postList.add(post);
+                    }
+                    savePostToDatabase();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
     }
 
     private void trackAnalyticsEvent(String postRef, boolean fullView) {
@@ -104,11 +133,10 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        dataSnapshot.getRef();
         Post post = dataSnapshot.getValue(Post.class);
         post.setPostRef(dataSnapshot.getRef().getKey());
         postsAdapter.addNewPost(post);
-        addToDataBase(post);
+        //addToDataBase(post);
     }
 
     @Override
@@ -131,9 +159,12 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
 
     }
 
-    private void addToDataBase(Post post) {
+    private void savePostToDatabase() {
 
-        ContentValues post_values = new ContentValues();
+        new SaveDataAsyncTask(getApplicationContext()).execute(postList);
+
+
+/*        ContentValues post_values = new ContentValues();
         post_values.put(DatabaseContract.posts_table.TITLE, post.getTitle());
         post_values.put(DatabaseContract.posts_table.USERNAME, post.getUsername());
         post_values.put(DatabaseContract.posts_table.IMAGE_LINK, post.getImageLink());
@@ -145,6 +176,6 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
                 DatabaseContract.BASE_CONTENT_URI,
                 post_values,
                 DatabaseContract.posts_table.POST_REF + " = ?",
-                postRef);
+                postRef);*/
     }
 }

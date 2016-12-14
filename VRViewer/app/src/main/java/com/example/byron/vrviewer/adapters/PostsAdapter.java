@@ -24,7 +24,7 @@ import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
-    private static List<Post> postList;
+    private static ArrayList<Post> postList;
     private Context context;
 
     private static OnItemClickListener listener;
@@ -32,6 +32,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public PostsAdapter(Context context) {
         this.postList = new ArrayList<>();
         this.context = context;
+    }
+
+    public PostsAdapter(Context context, ArrayList<Post> postList) {
+        this.postList = new ArrayList<>();
+        this.context = context;
+
     }
 
     public void addNewPost(Post post) {

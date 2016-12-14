@@ -1,5 +1,7 @@
 package com.example.byron.vrviewer.activities;
 
+import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,8 +26,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -90,8 +90,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                Toast.makeText(SignInActivity.this, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, R.string.auth_fail, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -113,12 +112,10 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                         progressDialog.dismiss();
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, R.string.auth_fail, Toast.LENGTH_SHORT).show();
                         } else {
                             gotToExploreActivity();
                         }
-                        // ...
                     }
                 });
     }
@@ -154,7 +151,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         progressDialog.dismiss();
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.play_services_fail, Toast.LENGTH_SHORT).show();
     }
 
     @Override
