@@ -14,35 +14,36 @@
         android:background="@color/colorPrimaryDark">
 
         <TextView
-            android:text="@string/widget_title"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="66dp"
             android:layout_marginTop="9dp"
-            android:id="@+id/textView"
+            android:text="@string/widget_title"
             android:textColor="@color/buttonTextColor"
             android:textStyle="normal|bold" />
 
         <TextView
-            android:text="@string/widget_subtitle"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_below="@+id/textView"
             android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:text="@string/widget_subtitle"
             android:textColor="@color/buttonTextColor" />
 
         <ImageView
             android:id="@+id/widgetImgLauncher"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/ic_launcher"
-            android:layout_marginEnd="16dp"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/textView3" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/textView3"
+            android:contentDescription="@string/content_widget_icon"
+            android:src="@mipmap/ic_launcher" />
 
 
     </RelativeLayout>
@@ -51,7 +52,7 @@
         android:id="@+id/listViewWidget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/header_widget"/>
+        android:layout_below="@+id/header_widget" />
 
 
 </RelativeLayout>

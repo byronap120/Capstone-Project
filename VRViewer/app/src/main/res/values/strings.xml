@@ -19,5 +19,15 @@
     <string name="newPost_required_data">Required</string>
     <string name="newPost_image_error">An error occurred loading image</string>
 
+    <!--Admob-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!--ContentDescription-->
+    <string name="content_widget_image">Image Widget</string>
+    <string name="content_widget_icon">Image icon</string>
+    <string name="content_image_logo">Vr Viewer</string>
+    <string name="content_user_avatar">user avatar</string>
+    <string name="content_user_post">user post</string>
+    <string name="content_post_info">detail image button</string>
+    <string name="content_post_fullView">watch image on vr</string>
 </resources>

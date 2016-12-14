@@ -55,7 +55,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        AdView mAdView = (AdView)findViewById(R.id.adView);
+        AdView mAdView = (AdView) findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
@@ -82,7 +82,7 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ExplorePostsActivity.this).toBundle();
 
 
-                startActivity(intent , bundle);
+                startActivity(intent, bundle);
             }
         });
 
@@ -137,10 +137,8 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         post_values.put(DatabaseContract.posts_table.TITLE, post.getTitle());
         post_values.put(DatabaseContract.posts_table.USERNAME, post.getUsername());
         post_values.put(DatabaseContract.posts_table.IMAGE_LINK, post.getImageLink());
-        post_values.put(DatabaseContract.posts_table.POST_REF,  post.getPostRef());
-
-    //    getApplicationContext().getContentResolver().insert(DatabaseContract.BASE_CONTENT_URI, post_values);
-
+        post_values.put(DatabaseContract.posts_table.POST_REF, post.getPostRef());
+        
         String[] postRef = {post.getPostRef()};
 
         getApplicationContext().getContentResolver().update(
