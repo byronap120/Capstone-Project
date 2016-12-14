@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "547410646258-24454brsf4an17l22n7spm3iiu6b7007.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.byron.vrviewer",
-            "certificate_hash": "680C33F8076A020A2124263C5BB48E96795BC6C1"
-          }
-        },
-        {
           "client_id": "547410646258-dd3k9s0ft6kmustgjgvl1ajoc67v3k86.apps.googleusercontent.com",
           "client_type": 3
         }
