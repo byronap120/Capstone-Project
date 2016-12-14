@@ -1,7 +1,6 @@
 package com.example.byron.vrviewer.activities;
 
 import android.app.ActivityOptions;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.example.byron.vrviewer.DatabaseContract;
 import com.example.byron.vrviewer.R;
 import com.example.byron.vrviewer.SaveDataAsyncTask;
 import com.example.byron.vrviewer.adapters.PostsAdapter;
@@ -136,7 +134,6 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
         Post post = dataSnapshot.getValue(Post.class);
         post.setPostRef(dataSnapshot.getRef().getKey());
         postsAdapter.addNewPost(post);
-        //addToDataBase(post);
     }
 
     @Override
@@ -160,22 +157,6 @@ public class ExplorePostsActivity extends AppCompatActivity implements ChildEven
     }
 
     private void savePostToDatabase() {
-
         new SaveDataAsyncTask(getApplicationContext()).execute(postList);
-
-
-/*        ContentValues post_values = new ContentValues();
-        post_values.put(DatabaseContract.posts_table.TITLE, post.getTitle());
-        post_values.put(DatabaseContract.posts_table.USERNAME, post.getUsername());
-        post_values.put(DatabaseContract.posts_table.IMAGE_LINK, post.getImageLink());
-        post_values.put(DatabaseContract.posts_table.POST_REF, post.getPostRef());
-
-        String[] postRef = {post.getPostRef()};
-
-        getApplicationContext().getContentResolver().update(
-                DatabaseContract.BASE_CONTENT_URI,
-                post_values,
-                DatabaseContract.posts_table.POST_REF + " = ?",
-                postRef);*/
     }
 }

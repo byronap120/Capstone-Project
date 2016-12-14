@@ -112,9 +112,9 @@ public class BaseImageVRActivity extends AppCompatActivity implements LoaderMana
         public void onLoadError(String errorMessage) {
             loadImageSuccessful = false;
             Toast.makeText(
-                    BaseImageVRActivity.this, "Error loading pano: " + errorMessage, Toast.LENGTH_LONG)
+                    BaseImageVRActivity.this, R.string.error_panoramic + errorMessage, Toast.LENGTH_LONG)
                     .show();
-            Log.e(TAG, "Error loading pano: " + errorMessage);
+            Log.e(TAG, R.string.error_panoramic + errorMessage);
         }
     }
 

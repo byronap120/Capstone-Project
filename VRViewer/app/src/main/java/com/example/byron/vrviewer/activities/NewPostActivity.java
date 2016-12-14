@@ -134,7 +134,6 @@ public class NewPostActivity extends BaseImageVRActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 progressDialog.dismiss();
-                //startActivity(new Intent(NewPostActivity.this, ExplorePostsActivity.class));
                 onBackPressed();
             }
         });
