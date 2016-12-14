@@ -54,7 +54,7 @@
                 android:layout_below="@+id/imageViewPost"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:background="@color/postUserName" />
+                android:background="@color/backgroundPost" />
 
             <ImageButton
                 android:id="@+id/buttonDetails"

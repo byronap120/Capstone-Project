@@ -144,6 +144,8 @@ public class NewPostActivity extends BaseImageVRActivity {
         if (requestCode == GALLERY && resultCode == RESULT_OK) {
             selectedImageUri = data.getData();
             loadPanoramicImageFromDisk(selectedImageUri);
+        } else if (resultCode == RESULT_CANCELED) {
+            finish();
         }
     }
 
